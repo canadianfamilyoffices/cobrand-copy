@@ -275,17 +275,23 @@
     function buildOutput() {
       const h1 = document.getElementById('h1').value.trim();
       const h2 = document.getElementById('h2').value.trim();
+      const rule1 = '\u2501'.repeat(('HEADLINE 1  \u00b7  Sets the idea \u2014 why it matters').length);
+      const rule2 = '\u2501'.repeat(('HEADLINE 2  \u00b7  Creates curiosity, drives engagement').length);
       return [
-        'HEADLINE 1  (max 80 characters \u2014 sets the idea)',
+        'HEADLINE 1  \u00b7  Sets the idea \u2014 why it matters',
+        rule1,
         '',
         h1,
-        '(' + h1.length + ' characters)',
         '',
-        DIV,
-        'HEADLINE 2  (max 55 characters \u2014 drives engagement)',
+        h1.length + ' of 80 characters',
+        '',
+        '',
+        'HEADLINE 2  \u00b7  Creates curiosity, drives engagement',
+        rule2,
         '',
         h2,
-        '(' + h2.length + ' characters)',
+        '',
+        h2.length + ' of 55 characters',
       ].join('\n');
     }
 
