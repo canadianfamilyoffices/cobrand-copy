@@ -164,7 +164,13 @@
       color: var(--bg);
     }
 
-    #copybtn:disabled {
+    #dlbtn {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    #copybtn:disabled, #dlbtn:disabled {
       opacity: 0.3;
       cursor: not-allowed;
     }
@@ -221,7 +227,7 @@
     <p class="card-label">Headline 1</p>
     <p class="field-hint">Sets the idea — why it matters. Use a strong quote or direct statement.</p>
     <div class="hl-wrap">
-      <textarea id="h1" rows="3" placeholder="e.g. Thane Stenner: The defining attributes of an elite wealth advisory team" oninput="count('h1', 80)"></textarea>
+      <textarea id="h1" rows="3" placeholder="e.g. A family office isn't just for billionaires — here's how to build one" oninput="count('h1', 80)"></textarea>
       <span class="counter ok" id="h1-c">0 / 80</span>
     </div>
   </div>
@@ -230,13 +236,14 @@
     <p class="card-label">Headline 2</p>
     <p class="field-hint">Creates curiosity and drives engagement.</p>
     <div class="hl-wrap">
-      <textarea id="h2" rows="2" placeholder="e.g. What distinguishes the rare teams serving UHNW investors" oninput="count('h2', 55)"></textarea>
+      <textarea id="h2" rows="2" placeholder="e.g. The structure most families get wrong at the start" oninput="count('h2', 55)"></textarea>
       <span class="counter ok" id="h2-c">0 / 55</span>
     </div>
   </div>
 
   <div class="actions">
     <button id="copybtn" onclick="copyOutput()" disabled>Copy output</button>
+    <button id="dlbtn" onclick="downloadOutput()" disabled>Download .txt</button>
     <span class="toast" id="toast">✓ Copied to clipboard</span>
   </div>
 
@@ -260,7 +267,9 @@
     function updateBtn() {
       const h1 = document.getElementById('h1').value.trim();
       const h2 = document.getElementById('h2').value.trim();
-      document.getElementById('copybtn').disabled = !(h1 && h2 && h1.length <= 80 && h2.length <= 55);
+      const ok = !!(h1 && h2 && h1.length <= 80 && h2.length <= 55);
+      document.getElementById('copybtn').disabled = !ok;
+      document.getElementById('dlbtn').disabled = !ok;
     }
 
     function buildOutput() {
@@ -290,6 +299,20 @@
         t.classList.add('show');
         setTimeout(() => t.classList.remove('show'), 2500);
       });
+    }
+
+    function downloadOutput() {
+      const text = buildOutput();
+      document.getElementById('output-text').textContent = text;
+      document.getElementById('output-wrap').classList.add('visible');
+
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url;
+      a.download = 'cobrand-headlines-' + new Date().toISOString().slice(0, 10) + '.txt';
+      a.click();
+      URL.revokeObjectURL(url);
     }
   </script>
 
